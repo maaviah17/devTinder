@@ -1,17 +1,24 @@
 const express = require("express");
 const app = express();
 
-// app.post("/route", (req,res)=>{
-//     res.send("hello from the post api");
+// this is a middleware 
+app.use("/",(req,res,next)=>{
+    next();
+})
+
+// middleware is called middleware because they sit in the middle of the request and response cycle. 
+// it passes all the middlewares until it reaches the route handler
+
+app.get("/user", (req,res,next)=>{
+    console.log("handling the route2");
+    res.send("2nd route handler");
+    // next();
+})
+
+// app.get("/user",(req,res,next)=>{
+//     console.log("this is the 1st route");
+//     next();
 // })
-
-app.use("/hello",(req,res)=>{
-    res.send("hello from the server");
-})
-
-app.use("/loads",(req,res)=>{
-    res.send("hello from the server");
-})
 
 
 app.listen(4000,()=>{

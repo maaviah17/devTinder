@@ -49,7 +49,7 @@ app.get("/booking", (req,res)=>{
 app.get("/booking/:id", (req,res)=>{
     const id = parseInt(req.params.id)
     const book = books.find(b=> b.id == id)
-    res.json(book)
+    res.json
 })
 
 PORT = 3010;
