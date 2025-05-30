@@ -1,37 +1,35 @@
 const express = require("express");
+const connectDB = require("./config/database");
 const app = express();
+const {User} = require("./models/user");
 
-// this is a middleware 
-app.use("/",(req,res,next)=>{
-    next();
-})
+app.post("/signup", async (req,res)=>{
 
-// middleware is called middleware because they sit in the middle of the request and response cycle. 
-// it passes all the middlewares until it reaches the route handler
-
-app.get("/getUserData", (req,res)=>{
-    // Logic of DB call and get user data 
-
-    throw new Error("randomjfnjdjfjdf")
-    res.send("User data sent");
-})
-
-app.use("/", (err,req,res,next)=>{
-    if(err){
-        // log your error message
-        res.status(500).send("Something went wrong maaaviahhh ;( ");
-    }else{
-        next();
+    // Creating a new instance of the user model
+    const user = new User({
+        firstName : "Vyrat",
+        lastName : "Chokli",
+        emailId :"anushka@mail.com",
+        password : "iamweak",
+    });
+    try{
+        await user.save();
+        res.send("User added successfully ✅");
+    }catch(err){
+        res.status(500).send("Error saving the user: " + err.message);
     }
+    
 })
 
+connectDB()
+    .then(()=>{
+        console.log("Db connection established...");
+        app.listen(4000,()=>{
+            console.log("listening on port 4000...")
+        })
+    })
+    .catch((err)=>{
+        console.log(err);
+        console.error("Db not connected")
+    })
 
-// app.get("/user",(req,res,next)=>{
-//     console.log("this is the 1st route");
-//     next();
-// })
-
-
-app.listen(4000,()=>{
-    console.log("listening on port 4000...")
-})

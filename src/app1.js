@@ -1,26 +1,37 @@
 const express = require("express");
 const app = express();
- 
-app.get("/user/:userId",(req,res)=>{
-    console.log(req.params);
 
-    res.send({
-        firstName : "Muawiyah",lastName : "Khalid"
-    });
+// this is a middleware 
+app.use("/",(req,res,next)=>{
+    next();
 })
 
-app.post("/user", (req,res)=>{
-    res.send("data saved to database !!")
+// middleware is called middleware because they sit in the middle of the request and response cycle. 
+// it passes all the middlewares until it reaches the route handler
+
+app.get("/getUserData", (req,res)=>{
+    // Logic of DB call and get user data 
+
+    throw new Error("randomjfnjdjfjdf")
+    res.send("User data sent");
 })
 
-app.delete("/user",(req,res)=>{
-    res.send("deleted user successfully ;) ")
+app.use("/", (err,req,res,next)=>{
+    if(err){
+        // log your error message
+        res.status(500).send("Something went wrong maaaviahhh ;( ");
+    }else{
+        next();
+    }
 })
 
-app.use("/test", (req,res)=>{
-    res.send("this is the /test route");
-})
 
-app.listen(4010,()=>{
-    console.log("server listening...")
+// app.get("/user",(req,res,next)=>{
+//     console.log("this is the 1st route");
+//     next();
+// })
+
+
+app.listen(4000,()=>{
+    console.log("listening on port 4000...")
 })
