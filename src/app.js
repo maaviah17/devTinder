@@ -2,6 +2,8 @@ const express = require("express");
 const connectDB = require("./config/database");
 const app = express();
 const {User} = require("./models/user");
+const { validateSignUpData } = require("./utils/validation");
+const bcrypt = require("bcrypt"); 
 
 app.use(express.json());
 
@@ -10,16 +12,51 @@ app.post("/signup", async (req,res)=>{
 
     // console.log(req.body);
 
-    // Creating a new instance of the user model
-    const user = new User(req.body);
-    
     try{
+        // validation of data
+        validateSignUpData(req);
+        
+        const {firstName, lastName, emailId, password} = req.body;
+        // encrypting the password
+        const passwordHash = await bcrypt.hash(password,1);
+        console.log(passwordHash);
+
+        // Creating a new instance of the user model
+        const user = new User({
+            firstName,
+            lastName, 
+            emailId,
+            password : passwordHash,
+        });
+
+
         await user.save();
         res.send("User added successfully ✅");
     }catch(err){
-        res.status(500).send("Error saving the user: " + err.message);
+        res.status(500).send("ERROR : " + err.message);
+    } 
+})
+
+// user login
+app.post("/login", async (req,res)=>{
+
+    try{
+
+        const {emailId, password} = req.body;
+        const user = await User.findOne({emailId : emailId});
+        if(!user){
+            res.status(400).send("WRONG LOGIN CREDENTIALS");
+        }
+        const match = await bcrypt.compare(password,user.password);
+        if(!match){
+            res.status(400).send("WRONG LOGIN CREDENTIALS");
+        }else{
+            res.send("User loggedin successfully");
+        }
+
+    }catch(err){
+        res.status(400).send("something went wrong !!");
     }
-    
 })
 
 // find user by email
