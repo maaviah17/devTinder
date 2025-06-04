@@ -6,6 +6,7 @@ const { validateSignUpData } = require("./utils/validation");
 const bcrypt = require("bcrypt"); 
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -68,33 +69,14 @@ app.post("/login", async (req,res)=>{
     }
 })
 
-app.get("/profile", async (req,res)=>{
+app.get("/profile", userAuth , async (req,res)=>{
 
-    try{
-
-        const cookie = req.cookies;
-        const {token} = cookie;
-        
-        if(!token){
-            throw new Error("invalid token")
-        }
-        // validate this token
-        const decodedMsg = await jwt.verify(token, "MMK@USER17");
-        const { _id } = decodedMsg;
-        console.log("logged in user is : " + _id);
-    
-        const user = await User.findById(_id);
-        if(!user){
-            throw new Error("user does not exist");
-        }
+    try{ 
+        const user = req.user;
         res.send(user);
-
     }catch(err){
-        res.status(400).send("something went wrong");
-    }
-
-
-    
+        res.status(400).send("ERROR : " + err.message);
+    }    
 })
 
 // find user by email
