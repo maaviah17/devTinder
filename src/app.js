@@ -1,7 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/database");
 const app = express();
-const {User , } = require("./models/user");
+const {User } = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
 const bcrypt = require("bcrypt"); 
 const cookieParser = require("cookie-parser");
@@ -53,7 +53,7 @@ app.post("/login", async (req,res)=>{
         const isPasswordValid = await user.validatePassword(password)
         if(isPasswordValid){
             
-            // create a JWT token
+            // create a JWT token   
             const token = await user.getJWT();
             console.log(token);
 
@@ -75,6 +75,7 @@ app.get("/profile", userAuth , async (req,res)=>{
 
     try{ 
         const user = req.user;
+        console.log("user sending req : ", user.firstName);
         res.send(user);
     }catch(err){
         res.status(400).send("ERROR : " + err.message);
