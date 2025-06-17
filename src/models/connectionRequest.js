@@ -4,29 +4,32 @@ const mongoose = require("mongoose");
 // its to stores the connection requests sent by the user to other users, status of the request, etc
 const connectionRequestSchema = new mongoose.Schema({
 
-    fromUserId : {
-        type : mongoose.Schema.Types.ObjectId,
-        required : true,
+    fromUserId: {
+        type: mongoose.Schema.Types.ObjectId,
+        // linking ... reference to the user collection 
+        ref: "User",
+        required: true,
     },
-    toUserId : {
-        type : mongoose.Schema.Types.ObjectId,
-        required : true,
+    toUserId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
     },
-    status : {
-        type : String,
-        required : true,
-        enum : {
-            values : ["ignored", "interested", "accepted", "rejected"], 
-            message : `{VALUE} is incorrect status type`
+    status: {
+        type: String,
+        required: true,
+        enum: {
+            values: ["ignored", "interested", "accepted", "rejected"],
+            message: `{VALUE} is incorrect status type`
         }
 
     }
 
-},{
-    timestamps : true,
+}, {
+    timestamps: true,
 });
 
-connectionRequestSchema.index({fromUserId : 1, toUserId : 1});
+connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 });
 
 const ConnectionRequest = new mongoose.model("ConnectionRequest", connectionRequestSchema);
 
