@@ -44,7 +44,9 @@ authRouter.post("/login", async (req, res) => {
 
     try {
 
+        console.log("🔐 /login hit");
         const { emailId, password } = req.body;
+        console.log("📥 Body:", req.body);
         const user = await User.findOne({ emailId: emailId });
         if (!user) {
             res.status(400).send("WRONG LOGIN CREDENTIALS");
@@ -60,13 +62,16 @@ authRouter.post("/login", async (req, res) => {
             res.cookie("token", token, {
                 expires: new Date(Date.now() + 5 * 36000000)
             });
-            res.send(user)
+            // res.send(user)
+            return res.status(200).send(user);
         } else {
             res.status(400).send("WRONG LOGIN CREDENTIALS");
         }
 
     } catch (err) {
-        res.status(400).send("something went wrong !!");
+        // res.status(400).send("something went wrong !!");
+        console.error("💥 Login error:", err);
+        return res.status(500).send("something went wrong !!");
     }
 })
 
