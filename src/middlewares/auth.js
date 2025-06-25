@@ -13,30 +13,31 @@ const { User } = require("../models/user");
 // };
 
 
-const userAuth = async (req,res,next)=>{
-    try{
-        const {token} = req.cookies;
-        console.log("token recieved : ", req.cookies.token );
+const userAuth = async (req, res, next) => {
+    try {
+        const { token } = req.cookies;
+        console.log("token recieved : ", req.cookies.token);
         if (!token) {
-            return res.status(401).send("No token found");
-          }
-          
-        const decodedObj = await jwt.verify(token, "MMK@USER17"); 
-    
+            return res.status(401).send("Please login !!");
+            console.log("no token")
+        }
+
+        const decodedObj = await jwt.verify(token, "MMK@USER17");
+
         const { _id } = decodedObj;
-        
-        const user = await User.findById(_id); 
-        if(!user){
+
+        const user = await User.findById(_id);
+        if (!user) {
             return res.status(401).send("No token found");
         }
         req.user = user;
         next();
-    
+
         // validate the token
-    
+
         // find the user
 
-    }catch(err){
+    } catch (err) {
         res.status(400).send("ERROR : " + err.message);
     }
     // read the token from the req cookies
