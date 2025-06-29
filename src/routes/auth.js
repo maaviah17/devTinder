@@ -65,7 +65,7 @@ authRouter.post("/login", async (req, res) => {
             // res.send(user)
             return res.status(200).send(user);
         } else {
-            res.status(400).send("WRONG LOGIN CREDENTIALS");
+            return res.status(400).send("WRONG LOGIN CREDENTIALS");
         }
 
     } catch (err) {
@@ -73,6 +73,15 @@ authRouter.post("/login", async (req, res) => {
         console.error("💥 Login error:", err);
         return res.status(500).send("something went wrong !!");
     }
+})
+
+authRouter.post("/come", (req, res) => {
+
+    console.log("api hit");
+    return res.status(200).send({
+        message: "hey this is successfull"
+    })
+
 })
 
 // logout user

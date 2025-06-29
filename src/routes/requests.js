@@ -5,9 +5,12 @@ const { ConnectionRequest } = require("../models/connectionRequest");
 const { User } = require("../models/user");
 const { faG } = require("@fortawesome/free-solid-svg-icons");
 
+const sendEmail = require("../utils/sendEmail");
+
 requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
 
     try {
+
         const fromUserId = req.user._id;
         const toUserId = req.params.toUserId;
         const status = req.params.status;
@@ -52,8 +55,16 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
             status,
         })
 
+        // console.log("fromUserId:", req.user?._id);
+        // console.log("toUserId:", toUserId);
+        // console.log("status:", status);
+
+
 
         const data = await connectionRequest.save();
+
+        const emailRes = await sendEmail.run();
+        console.log(emailRes);
 
         res.json({
             message: req.user.firstName + " is " + status + " in " + userExist.firstName + "'s profile",
@@ -79,7 +90,7 @@ requestRouter.post("/request/review/:status/:requestId", userAuth, async (req, r
         const requestId = req.params.requestId;
 
         const allowedStatus = ["accepted", "rejected"];
-    
+
         // validating the status
         if (!allowedStatus.includes(status)) {
             return res.status(400).json({
