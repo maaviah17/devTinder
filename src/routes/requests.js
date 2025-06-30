@@ -63,8 +63,13 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
 
         const data = await connectionRequest.save();
 
-        const emailRes = await sendEmail.run();
-        console.log(emailRes);
+        try {
+            const emailRes = await sendEmail.run();
+            console.log(emailRes);
+        } catch (mailErr) {
+            console.error('Email error:', mailErr);
+            // Decide: fail hard, or respond 202 Accepted and retry later
+        }
 
         res.json({
             message: req.user.firstName + " is " + status + " in " + userExist.firstName + "'s profile",
