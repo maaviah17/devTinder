@@ -22,3 +22,6 @@
 - GET /fuser/eed -> gets you the profiles of other users on platform
 
 Status : ignore, interested, accepted, rejected
+
+-> can use Bee/bullmq/rabbitmq for bulk emailing (implement later)
+-> sendEmail function <= make it dynamic   
