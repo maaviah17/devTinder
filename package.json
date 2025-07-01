@@ -11,14 +11,17 @@
     "start": "node src/app.js"
   },
   "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "bcrypt": "^6.0.0",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "minio": "^8.0.5",
-    "mongoose": "^8.15.1",
-    "validator": "^13.15.15"
-  }
+  "@fortawesome/free-solid-svg-icons": "^6.7.2",
+  "@aws-sdk/client-ses": "^3.840.0",
+  "bcrypt": "^6.0.0",
+  "cookie-parser": "^1.4.7",
+  "cors": "^2.8.5",
+  "dotenv": "^17.0.0",
+  "express": "^5.1.0",
+  "jsonwebtoken": "^9.0.2",
+  "minio": "^8.0.5",
+  "mongoose": "^8.15.1",
+  "validator": "^13.15.15"
+}
+
 }
